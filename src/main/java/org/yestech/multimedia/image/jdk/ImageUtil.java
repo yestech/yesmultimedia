@@ -4,6 +4,7 @@ import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,6 @@ import java.io.*;
 
 /**
  * Image Manipulation Utility Methods using only the JDK.
- *
  */
 public final class ImageUtil {
     final private static Logger logger = LoggerFactory.getLogger(ImageUtil.class);
@@ -71,7 +71,8 @@ public final class ImageUtil {
 
             if (thumbRatio < imageRatio) {
                 thumbHeight = (int) (thumbWidth / imageRatio);
-            } else {
+            }
+            else {
                 thumbWidth = (int) (thumbHeight * imageRatio);
             }
 
@@ -93,7 +94,8 @@ public final class ImageUtil {
             // fixes problem on Unix deployments
             if (outImageFileName.indexOf("//") != 0) {
                 logger.debug("  double quotes found in path");
-            } else {
+            }
+            else {
                 logger.debug("  No double quotes found in path");
             }
             outImageFileName = StringUtils.replace(outImageFileName, "//", SLASH);
@@ -110,14 +112,17 @@ public final class ImageUtil {
             encoder.setJPEGEncodeParam(param);
             encoder.encode(thumbImage);
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             logger.error("*** " + e.getClass().getName() + " occurred ***", e);
             throw new RuntimeException(e);
-        } finally {
+        }
+        finally {
             if (out != null) {
                 try {
                     out.close();
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     logger.error(e.getMessage(), e);
                 }
             }
@@ -138,7 +143,8 @@ public final class ImageUtil {
         //For JPG without alpha-blending, use TYPE_INT_RGB, else use TYPE_INT_ARGB:
         if (useAlpha) {
             bi = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-        } else {
+        }
+        else {
             bi = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
         }
 
@@ -149,7 +155,8 @@ public final class ImageUtil {
     }
 
     /**
-     * Wrapper for method getByteArrayFromFile( File imageFile ) that takes String for the image filename instead of a File object of the image itself.
+     * Wrapper for method getByteArrayFromFile( File imageFile ) that takes String for the image filename instead
+     * of a File object of the image itself.
      *
      * @param inputImageFileName String
      * @return byte[]
@@ -157,5 +164,53 @@ public final class ImageUtil {
      */
     public static byte[] getByteArrayFromFile(String inputImageFileName) throws IOException {
         return FileUtils.readFileToByteArray(new File(inputImageFileName));
+    }
+
+    public static BufferedImage scale(BufferedImage image, int max) {
+        int height = image.getHeight();
+        int width = image.getWidth();
+
+        // There is no need to attempt to resize, the image is fine as is.
+        if (height <= max && width <= max) return image;
+
+
+        if (height > width && height > max) {
+            double ratio = (double) width / (double) height;
+
+            height = max;
+            width = (int) Math.round((double) max * ratio);
+        }
+        else if (width > height && width > max) {
+
+            double ratio = (double) height / (double) width;
+
+            width = max;
+            height = (int) Math.round((double) max * ratio);
+        }
+        else {
+            // they must be the same
+            width = max;
+            height = max;
+        }
+
+        BufferedImage thumbImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics2D = thumbImage.createGraphics();
+        graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+
+        graphics2D.drawImage(image, 0, 0, width, height, null);
+
+        return thumbImage;
+    }
+
+    public static void scale(File oldImage, File newImage, int max) throws IOException {
+        BufferedImage image = ImageIO.read(oldImage);
+        image = scale(image, max);
+
+        if (!newImage.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            newImage.createNewFile();
+        }
+
+        ImageIO.write(image, "jpeg", new BufferedOutputStream(new FileOutputStream(newImage)));
     }
 }
