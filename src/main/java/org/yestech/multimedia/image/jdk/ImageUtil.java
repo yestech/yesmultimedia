@@ -211,6 +211,19 @@ public final class ImageUtil {
             newImage.createNewFile();
         }
 
-        ImageIO.write(image, "jpeg", new BufferedOutputStream(new FileOutputStream(newImage)));
+        OutputStream out = null;
+
+        try {
+            out = new BufferedOutputStream(
+                    new FileOutputStream(oldImage));
+            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+            JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(image);
+            param.setQuality((float) 1.0, false);
+            encoder.setJPEGEncodeParam(param);
+            encoder.encode(image);
+        }
+        finally {
+            if (out != null) out.close();
+        }
     }
 }
