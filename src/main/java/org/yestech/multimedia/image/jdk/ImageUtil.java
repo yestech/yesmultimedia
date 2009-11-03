@@ -211,19 +211,15 @@ public final class ImageUtil {
             newImage.createNewFile();
         }
 
-        OutputStream out = null;
+        String suffix;
+        int index = newImage.getName().lastIndexOf(".");
+        if (index != -1) {
+            suffix = newImage.getName().substring(index + 1);
+        }
+        else {
+            suffix = "png";
+        }
 
-        try {
-            out = new BufferedOutputStream(
-                    new FileOutputStream(oldImage));
-            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-            JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(image);
-            param.setQuality((float) 1.0, false);
-            encoder.setJPEGEncodeParam(param);
-            encoder.encode(image);
-        }
-        finally {
-            if (out != null) out.close();
-        }
+        ImageIO.write(image, suffix, new BufferedOutputStream(new FileOutputStream(newImage)));
     }
 }
