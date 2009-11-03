@@ -202,7 +202,7 @@ public final class ImageUtil {
         return thumbImage;
     }
 
-    public static void scale(File oldImage, File newImage, int max) throws IOException {
+    public static void scale(File oldImage, File newImage, int max, String formatName) throws IOException {
         BufferedImage image = ImageIO.read(oldImage);
         image = scale(image, max);
 
@@ -211,15 +211,23 @@ public final class ImageUtil {
             newImage.createNewFile();
         }
 
+
+        ImageIO.write(image, formatName, new BufferedOutputStream(new FileOutputStream(newImage)));
+    }
+
+    public static void scale(File oldImage, File newImage, int max) throws IOException {
+        scale(oldImage, newImage, max, determineFormat(newImage.getName(), "png"));
+    }
+
+    public static String determineFormat(String fileName, String defaultFormat) {
         String suffix;
-        int index = newImage.getName().lastIndexOf(".");
+        int index = fileName.lastIndexOf(".");
         if (index != -1) {
-            suffix = newImage.getName().substring(index + 1);
+            suffix = fileName.substring(index + 1);
         }
         else {
-            suffix = "png";
+            suffix = defaultFormat;
         }
-
-        ImageIO.write(image, suffix, new BufferedOutputStream(new FileOutputStream(newImage)));
+        return suffix;
     }
 }
