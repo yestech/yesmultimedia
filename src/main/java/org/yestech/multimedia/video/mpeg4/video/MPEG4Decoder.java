@@ -1651,7 +1651,7 @@ public final class MPEG4Decoder implements Runnable {
 		dct_type = false;
 		
 		if ((derived_mb_type == 3) || (derived_mb_type == 4) 
-			|| ((cbpy << 2 + cbpc) != 0) ) { 					// TODO check this code (cbp заменено на (cbpy << 2 + cbpc))  
+			|| ((cbpy << 2 + cbpc) != 0) ) { 					// TODO check this code (cbp (cbpy << 2 + cbpc))  
 			dct_type = videoStream.next_bit();
 		}
 		if ( ((vop_coding_type == P_VOP) &&
