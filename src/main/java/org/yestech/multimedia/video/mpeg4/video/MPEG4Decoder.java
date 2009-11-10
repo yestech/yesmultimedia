@@ -1174,8 +1174,8 @@ public final class MPEG4Decoder implements Runnable {
 				if (inter_cae) dcecs_inter_cae = (short)videoStream.next_bits(8);
 				if (no_update) dcecs_no_update = (short)videoStream.next_bits(8);
 				if (upsampling) dcecs_upsampling = (short)videoStream.next_bits(8);
-				if (intra_blocks) dcecs_intra_blocks = (short)videoStream.next_bits(8); // TODO проверить
-				if (not_coded_blocks) dcecs_not_coded_blocks = (short)videoStream.next_bits(8); // TODO проверить
+				if (intra_blocks) dcecs_intra_blocks = (short)videoStream.next_bits(8); // TODO
+				if (not_coded_blocks) dcecs_not_coded_blocks = (short)videoStream.next_bits(8); // TODO
 				if (dct_coefs) dcecs_dct_coefs = (short)videoStream.next_bits(8);
 				if (dct_lines) dcecs_dct_lines = (short)videoStream.next_bits(8);
 				if (vlc_symbols) dcecs_vlc_symbols = (short)videoStream.next_bits(8);
