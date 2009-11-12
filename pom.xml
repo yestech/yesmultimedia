@@ -49,11 +49,6 @@
         </developer>
     </developers>
     <dependencies>
-        <!--<dependency>-->
-            <!--<groupId>de.huxhorn.sulky</groupId>-->
-            <!--<artifactId>de.huxhorn.sulky.3rdparty.jlayer</artifactId>-->
-            <!--<version>1.0</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>sun</groupId>
             <artifactId>applet-jsobject</artifactId>
