@@ -49,11 +49,11 @@
         </developer>
     </developers>
     <dependencies>
-        <dependency>
-            <groupId>de.huxhorn.sulky</groupId>
-            <artifactId>de.huxhorn.sulky.3rdparty.jlayer</artifactId>
-            <version>1.0</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>de.huxhorn.sulky</groupId>-->
+            <!--<artifactId>de.huxhorn.sulky.3rdparty.jlayer</artifactId>-->
+            <!--<version>1.0</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>sun</groupId>
             <artifactId>applet-jsobject</artifactId>
@@ -61,6 +61,14 @@
             <optional>true</optional>
             <scope>system</scope>
             <systemPath>${java.home}/lib/plugin.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>javazoom</groupId>
+            <artifactId>jlme</artifactId>
+            <version>0.1.3</version>
+            <optional>true</optional>
+            <scope>system</scope>
+            <systemPath>${basedir}/src/main/libs/jlme0.1.3.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
